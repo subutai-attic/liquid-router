@@ -1,4 +1,6 @@
 # liquid-router
+This is the fix branch of issue number #7
+
 The Subutai Liquid Router open hardware project sources.
 
 The 3DRender includes the 3D pdf of the board.
