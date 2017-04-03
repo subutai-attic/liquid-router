@@ -1,9 +1,7 @@
 # liquid-router
 The Subutai Liquid Router open hardware project sources.
 
-The FPGA folder includes IP cores, FPGA projects
-
-The PCB folder include Liquid Router's design
+Chip to chip communication folder include eMMC HC and LVDS communication for host controller IP core's 
 
 
 For more information about this project, please visit: https://optimal-dynamics.com/liquid-router.html
