@@ -415,8 +415,8 @@
       .CLKFBOUT_PHASE(0.0),     // Phase offset in degrees of CLKFB, (-360.000-360.000).
       .CLKIN1_PERIOD(10.0),      // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
       // CLKOUT0_DIVIDE - CLKOUT5_DIVIDE: Divide amount for each CLKOUT (1-128)
-      .CLKOUT0_DIVIDE(10),
-      .CLKOUT1_DIVIDE(80),
+      .CLKOUT0_DIVIDE(8),
+      .CLKOUT1_DIVIDE(32),
       .CLKOUT2_DIVIDE(1),
       .CLKOUT3_DIVIDE(1),
       .CLKOUT4_DIVIDE(1),
@@ -468,7 +468,7 @@
    // Xilinx HDL Language Template, version 2016.2
 
    OSERDESE2 #(
-      .DATA_RATE_OQ("SDR"),   // DDR, SDR
+      .DATA_RATE_OQ("DDR"),   // DDR, SDR
       .DATA_RATE_TQ("SDR"),   // DDR, BUF, SDR
       .DATA_WIDTH(8),         // Parallel data width (2-8,10,14)
       .INIT_OQ(1'b1),         // Initial value of OQ output (1'b0,1'b1)
@@ -521,7 +521,7 @@
    // Xilinx HDL Language Template, version 2016.2
 
    ISERDESE2 #(
-      .DATA_RATE("SDR"),           // DDR, SDR
+      .DATA_RATE("DDR"),           // DDR, SDR
       .DATA_WIDTH(8),              // Parallel data width (2-8,10,14)
       .DYN_CLKDIV_INV_EN("FALSE"), // Enable DYNCLKDIVINVSEL inversion (FALSE, TRUE)
       .DYN_CLK_INV_EN("FALSE"),    // Enable DYNCLKINVSEL inversion (FALSE, TRUE)
