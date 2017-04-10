@@ -18,6 +18,7 @@
         input   wire    q,
         input   wire    rst,
         output  wire    oq,
+        output  wire    clk,
         output  wire    clk_div,
         
 		// User ports ends
@@ -75,6 +76,7 @@
 		.S_AXI_RREADY(s00_axi_rready),
 		.q(q),
 		.rst(rst),
+		.clk(clk),
 		.clk_div(clk_div),
 		.oq(oq)
 	);

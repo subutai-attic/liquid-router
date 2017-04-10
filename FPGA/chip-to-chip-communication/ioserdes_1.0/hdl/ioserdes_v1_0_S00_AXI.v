@@ -17,6 +17,8 @@
 		// Users to add ports here
         input   wire    q,
         input   wire    rst,
+        
+        output  wire    clk,
         output  wire    clk_div,
         output  wire    oq,
 		// User ports ends
@@ -402,6 +404,7 @@
 	// Add user logic here
     reg bitslip;
     
+    assign clk_div = CLKOUT0;
     assign clk_div = CLKOUT1;
 
 
