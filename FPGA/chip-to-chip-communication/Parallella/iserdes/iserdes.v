@@ -15,8 +15,8 @@ module iserdes #(
  input  wire ce2,
  (* mark_debug = "true" *) input  wire locked_in,
  input  wire clk,
- input  wire clkdiv,
- input  wire rst
+ (* mark_debug = "true" *) input  wire clkdiv,
+ (* mark_debug = "true" *) input  wire rst
 );
 
 (* mark_debug = "true" *) reg bitslip;
@@ -62,8 +62,8 @@ ISERDESE2_inst(
                         // position every time Bitslip is invoked (DDR operation is different from
                         // SDR).
     // CE1, CE2: 1-bit (each) input: Data register clock enable inputs
-    .CE1(ce1),
-    .CE2(ce2),
+    .CE1(1'b1),
+    .CE2(1'b1),
     .CLKDIVP(CLKDIVP),  // 1-bit input: TBD
     // Clocks: 1-bit (each) input: ISERDESE2 clock input ports
     .CLK(clk),          // 1-bit input: High-speed clock
@@ -101,7 +101,7 @@ always @(posedge clkdiv)
       btsl_st <= 2'b00;
     end
     else begin
-      if (q != bitslip_pattern && ce && q != 8'hff && btsl_com_flag && locked_in) begin
+      if (q != bitslip_pattern && q != 8'hff && btsl_com_flag) begin
         case (btsl_st)
           2'b00: begin
             bitslip <= 1'b1;
@@ -126,7 +126,7 @@ always @(posedge clkdiv)
   end
 
 
-always @(posedge clk) begin
+always @(posedge clkdiv) begin
   if (rst == 0)
     resetn <= 1;
   else if (btsl_com_flag == 1)

@@ -169,7 +169,7 @@
     //SD-eMMC host controller registers
 	assign software_reset_o    = slv_reg11[24] ? 2'b11 : ( slv_reg11 [25] ? 2'b01 : ( slv_reg11 [26] ? 2'b10 : 2'b00 )); // software reset
 	assign timeout_contr_wire  = 1'b1  << slv_reg11[19:16] << 4'hD;          // Data timeout register
-	assign clock_divisor       = slv_reg11[15:8];// >> 1;                     // Clock_divisor  shift >>1 will decrease it
+	assign clock_divisor       = slv_reg11[15:8] >> 1;                     // Clock_divisor  shift >>1 will decrease it
 	assign command_o           = cmd_sel ? 14'h171a : slv_reg3 [29:16];    // CMD_INDEX choose.
 	assign argument_o          = arg_sel ? slv_reg0 : slv_reg2;            // CMD_Argument choose. Either Arg1 or Arg2  
 	assign block_size_o        = slv_reg1 [11:0];                          // Block size register
@@ -643,7 +643,7 @@
 	        5'h0D   : reg_data_out <= slv_reg13;
 	        5'h0E   : reg_data_out <= slv_reg14;
 	        5'h0F   : reg_data_out <= {slv_reg15[31:16],8'h00,ACMDErrorStatus};
-	        5'h10   : reg_data_out <= 32'h012CC8B2;    //slv_reg16; Capabilities register
+	        5'h10   : reg_data_out <= 32'h012C32B2;    //slv_reg16; Capabilities register
 	        5'h11   : reg_data_out <= 32'h00000005;    //slv_reg17; Capabilities register
 	        5'h12   : reg_data_out <= 0;               //slv_reg18;
 	        5'h13   : reg_data_out <= 0;               //slv_reg19;

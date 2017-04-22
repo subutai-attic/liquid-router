@@ -81,11 +81,7 @@
         input wire [1 : 0] M_AXI_RRESP,
         input wire  M_AXI_RLAST,
         input wire  M_AXI_RVALID,
-        output wire  M_AXI_RREADY,
-        
-        //
-        output wire sd_clk_high,
-        output wire sd_clk_sel
+        output wire  M_AXI_RREADY
         );
 
     //SD clock
@@ -330,12 +326,10 @@
         sd_clock_divider sd_clock_divider_i (
             .AXI_CLOCK(s00_axi_aclk),
             .sd_clk(SD_CLK),
-            .sd_clk_high(sd_clk_high),
             .DIVISOR(divisor),
             .AXI_RST(s00_axi_aresetn/* & int_clk_en*/),
             .Internal_clk_stable(int_clk_stbl),
-            .sd_clk90   (sd_clk90),
-            .sd_clk_sel (sd_clk_sel)
+            .sd_clk90(sd_clk90)
         );
 
     sd_cmd_master sd_cmd_master0(

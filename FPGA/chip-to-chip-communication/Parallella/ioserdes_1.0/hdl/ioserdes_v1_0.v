@@ -15,10 +15,17 @@
 	)
 	(
 		// Users to add ports here
-        input   wire    q,
         input   wire    rst,
-        output  wire    oq,
-        output  wire    clk,
+        input   wire    clkin_p,
+        input   wire    clkin_n,
+        input   wire    datain_p,
+        input   wire    datain_n,
+        
+        output  wire    clkout_p,
+        output  wire    clkout_n,
+        output  wire    dataout_p,
+        output  wire    dataout_n,
+        
         output  wire    clk_div,
         
 		// User ports ends
@@ -74,11 +81,16 @@
 		.S_AXI_RRESP(s00_axi_rresp),
 		.S_AXI_RVALID(s00_axi_rvalid),
 		.S_AXI_RREADY(s00_axi_rready),
-		.q(q),
 		.rst(rst),
-		.clk(clk),
 		.clk_div(clk_div),
-		.oq(oq)
+		.clkin_p(clkin_p),
+		.clkin_n(clkin_n),
+		.datain_p(datain_p),
+		.datain_n(datain_n),
+		.clkout_p(clkout_p),
+		.clkout_n(clkout_n),
+		.dataout_p(dataout_p),
+		.dataout_n(dataout_n)
 	);
 
 	// Add user logic here

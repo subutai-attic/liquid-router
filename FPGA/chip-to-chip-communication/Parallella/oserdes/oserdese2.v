@@ -5,7 +5,7 @@ module oserdese2 #(
     parameter data_rate_tq = "SDR",
     parameter serdes_mode  = "MASTER",
     parameter integer data_width = 8,
-    parameter integer tristate_width = 4
+    parameter integer tristate_width = 1
 )
 (
     input  wire [7:0] d,
@@ -56,7 +56,7 @@ OSERDESE2_inst (
     .D6(d[5]),
     .D7(d[6]),
     .D8(d[7]),
-    .OCE(oce),                      // 1-bit input: Output data clock enable
+    .OCE(1'b1),                      // 1-bit input: Output data clock enable
     .RST(!rst),                      // 1-bit input: Reset
     // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)
     .SHIFTIN1(SHIFTIN1),
