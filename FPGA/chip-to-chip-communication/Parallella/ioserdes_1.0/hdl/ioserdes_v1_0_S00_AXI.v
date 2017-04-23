@@ -425,8 +425,8 @@
       .CLKFBOUT_PHASE(0.0),     // Phase offset in degrees of CLKFB, (-360.000-360.000).
       .CLKIN1_PERIOD(10.0),      // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
       // CLKOUT0_DIVIDE - CLKOUT5_DIVIDE: Divide amount for each CLKOUT (1-128)
-      .CLKOUT0_DIVIDE(3.2),
-      .CLKOUT1_DIVIDE(12.8),
+      .CLKOUT0_DIVIDE(4),
+      .CLKOUT1_DIVIDE(16),
       .CLKOUT2_DIVIDE(1),
       .CLKOUT3_DIVIDE(1),
       .CLKOUT4_DIVIDE(1),

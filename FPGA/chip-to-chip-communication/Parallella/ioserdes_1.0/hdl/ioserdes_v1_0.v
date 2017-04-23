@@ -27,7 +27,6 @@
         output  wire    dataout_n,
         
         output  wire    clk_div,
-        
 		// User ports ends
 		// Do not modify the ports beyond this line
 
