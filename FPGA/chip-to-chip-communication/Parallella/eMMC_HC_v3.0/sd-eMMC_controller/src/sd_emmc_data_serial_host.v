@@ -84,8 +84,8 @@ module sd_data_serial_host(
            output reg we,
            //tristate data
            output reg DAT_oe_o,
-           output [7:0] DAT_dat_o,
-           input [7:0] DAT_dat_i,
+           output reg [15:0] d1d2_reg,
+           input [7:0] iddrQ1,
            //Controll signals
            input [`BLKSIZE_W-1:0] blksize,
            input bus_4bit,
@@ -134,11 +134,11 @@ reg [7:0] last_din;
 reg [3:0] crc_s;
 reg [4:0] data_index;
 reg [31:0] data_out;
-wire [7:0] iddrQ1;
-wire [7:0] iddrQ2;
+//wire [7:0] iddrQ1;
+//wire [7:0] iddrQ2;
 wire DDR50;
 reg [7:0] last_dinDDR;
-reg [15:0] d1d2_reg;
+//reg [15:0] d1d2_reg;
 reg [7:0] DAT_dat_regn;
 
 assign data_out_o [31:0] = {data_out[7:0], data_out[15:8], data_out[23:16], data_out[31:24]};
@@ -152,7 +152,7 @@ always @(posedge sd_clk)
 
 //sd data input pad register
 always @(negedge sd_clk)
-    DAT_dat_regn <= iddrQ2;
+    DAT_dat_regn <= iddrQ1;
 genvar i;
 generate
     for(i=0; i<16; i=i+1) begin: CRC_16_gen
@@ -166,21 +166,21 @@ generate
     end
 endgenerate
 
-IDDR_p IDDR_p_inst(
-  .reset(rst),
-  .clock(sd_clk),
-  .in_ddr(DAT_dat_i),
-  .iddr_Q1(iddrQ1),
-  .iddr_Q2(iddrQ2)
-);
+//IDDR_p IDDR_p_inst(
+//  .reset(rst),
+//  .clock(sd_clk),
+//  .in_ddr(DAT_dat_i),
+//  .iddr_Q1(iddrQ1),
+//  .iddr_Q2(iddrQ2)
+//);
 
-ODDR_p ODDR_p_inst(
-  .reset(rst),
-  .clock(sd_clk90),
-  .d1_wire(d1d2_reg[7:0]),
-  .d2_wire(d1d2_reg[15:8]),
-  .oq(DAT_dat_o)
-);
+//ODDR_p ODDR_p_inst(
+//  .reset(rst),
+//  .clock(sd_clk90),
+//  .d1_wire(d1d2_reg[7:0]),
+//  .d2_wire(d1d2_reg[15:8]),
+//  .oq(DAT_dat_o)
+//);
 
 assign busy = (state != IDLE);
 assign start_bit = !DAT_dat_reg[0];
