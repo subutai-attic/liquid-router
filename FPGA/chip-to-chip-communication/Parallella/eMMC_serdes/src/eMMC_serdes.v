@@ -8,17 +8,18 @@
         input   wire    pll_rst,
         input   wire    pll_clkin,
         input   wire    rst,
+        input   wire    SD_clk,
         input   wire    clkin_p,
         input   wire    clkin_n,
         input   wire    datain_p,
         input   wire    datain_n,
-        input   wire    cmd_o,
-        input   wire    cmd_t,
-        input   wire    sd_dat_t,
-        input   wire [7:0]   sd_dat_o,
+        (* mark_debug = "true" *) input   wire    cmd_o,
+        (* mark_debug = "true" *) input   wire    cmd_t,
+        (* mark_debug = "true" *) input   wire    sd_dat_t,
+        (* mark_debug = "true" *) input   wire [7:0]   sd_dat_o,
         
-        output  wire    cmd_i,
-        output  wire [7:0]    sd_dat_i,
+        (* mark_debug = "true" *) output  reg    cmd_i,
+        (* mark_debug = "true" *) output  reg [7:0]    sd_dat_i,
         output  wire    clkout_p,
         output  wire    clkout_n,
         output  wire    dataout_p,
@@ -30,12 +31,30 @@
 	 reg bitslip;
 	 wire txclk;
      wire txclk_div;
-     wire [7:0] slv_reg0;
-     wire [7:0] slv_reg4;
-     wire [7:0] slv_reg5;
+     
+     (* mark_debug = "true" *) wire [7:0] test_ptrn;
+     (* mark_debug = "true" *) reg  [7:0] sd_dat_out;
+     (* mark_debug = "true" *) wire [7:0] sd_dat_in;
     
     assign clk_div = txclk_div;
 
+    always @(posedge txclk_div)
+       if (rst == 1'b0) begin
+         sd_dat_out <= 0;
+        end
+        else begin
+             sd_dat_out <= {1'b0, sd_dat_o, sd_dat_t, cmd_t, cmd_o};
+        end
+
+    always @(posedge SD_clk)
+       if (rst == 1'b0) begin
+            cmd_i <= 1'b0;
+            sd_dat_i <= 0;
+        end
+        else begin
+            cmd_i <= sd_dat_in[0];
+            sd_dat_i[3:0] <= sd_dat_in[4:1];
+        end
    // PLLE2_BASE: Base Phase Locked Loop (PLL)
    //             Artix-7
    // Xilinx HDL Language Template, version 2016.2
@@ -156,7 +175,7 @@
       .D4(1'b0),
       .D5(1'b0),
       .D6(1'b0),
-      .D7(1'b1),
+      .D7(1'b1), 
       .D8(1'b1),
       .OCE(1'b1),             // 1-bit input: Output data clock enable
       .RST(!rst),             // 1-bit input: Reset
@@ -200,14 +219,14 @@
       .CLK(txclk),             // 1-bit input: High speed clock
       .CLKDIV(txclk_div),       // 1-bit input: Divided clock
       // D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)
-      .D1(cmd_o),
-      .D2(cmd_t),
-      .D3(sd_dat_t),
-      .D4(sd_dat_o[0]),
-      .D5(sd_dat_o[1]),
-      .D6(sd_dat_o[2]),
-      .D7(sd_dat_o[3]),
-      .D8(1'b0),
+      .D1(sd_dat_out[0]),
+      .D2(sd_dat_out[1]),
+      .D3(sd_dat_out[2]),
+      .D4(sd_dat_out[3]),
+      .D5(sd_dat_out[4]),
+      .D6(sd_dat_out[5]),
+      .D7(sd_dat_out[6]),
+      .D8(sd_dat_out[7]),
       .OCE(1'b1),             // 1-bit input: Output data clock enable
       .RST(!rst),             // 1-bit input: Reset
       // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)
@@ -292,14 +311,14 @@
    ISERDESE2_clock_inst (
       .O(),                       // 1-bit output: Combinatorial output
       // Q1 - Q8: 1-bit (each) output: Registered data outputs
-      .Q1(slv_reg5[7]),
-      .Q2(slv_reg5[6]),
-      .Q3(slv_reg5[5]),
-      .Q4(slv_reg5[4]),
-      .Q5(slv_reg5[3]),
-      .Q6(slv_reg5[2]),
-      .Q7(slv_reg5[1]),
-      .Q8(slv_reg5[0]),
+      .Q1(test_ptrn[7]),
+      .Q2(test_ptrn[6]),
+      .Q3(test_ptrn[5]),
+      .Q4(test_ptrn[4]),
+      .Q5(test_ptrn[3]),
+      .Q6(test_ptrn[2]),
+      .Q7(test_ptrn[1]),
+      .Q8(test_ptrn[0]),
       // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
       .SHIFTOUT1(),
       .SHIFTOUT2(),
@@ -358,14 +377,14 @@
    ISERDESE2_data_inst (
       .O(),                       // 1-bit output: Combinatorial output
       // Q1 - Q8: 1-bit (each) output: Registered data outputs
-      .Q1(),
-      .Q2(),
-      .Q3(),
-      .Q4(sd_dat_i[3]),
-      .Q5(sd_dat_i[2]),
-      .Q6(sd_dat_i[1]),
-      .Q7(sd_dat_i[0]),
-      .Q8(cmd_i),
+      .Q1(sd_dat_in[7]),
+      .Q2(sd_dat_in[6]),
+      .Q3(sd_dat_in[5]),
+      .Q4(sd_dat_in[4]),
+      .Q5(sd_dat_in[3]),
+      .Q6(sd_dat_in[2]),
+      .Q7(sd_dat_in[1]),
+      .Q8(sd_dat_in[0]),
       // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
       .SHIFTOUT1(),
       .SHIFTOUT2(),
@@ -415,7 +434,7 @@
          count <= 0;
        end
        else begin
-         if (slv_reg5[7:0] != bitslip_pattern) begin
+         if (test_ptrn[7:0] != bitslip_pattern) begin
            case (btsl_st)
              2'b00: begin
                bitslip <= 1'b1;
@@ -438,7 +457,7 @@
              end
            endcase
          end
-         else if (slv_reg5[7:0] == bitslip_pattern) begin
+         else if (test_ptrn[7:0] == bitslip_pattern) begin
            btsl_st <= 2'b00;
          end
 

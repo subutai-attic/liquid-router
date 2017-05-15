@@ -35,10 +35,10 @@ module artix_emmc_serdes#(
       (* mark_debug = "true" *) input   wire    sd_clkin,
 
       output   wire   SD_clk,
-      (* mark_debug = "true" *) output   wire   cmd_o,
-      (* mark_debug = "true" *) output   wire   cmd_t,
-      output   wire [7:0]   sd_dat_o,
-      output   wire [7:0]   sd_dat_t,
+      (* mark_debug = "true" *) output   reg   cmd_o,
+      (* mark_debug = "true" *) output   reg   cmd_t,
+      output   reg [7:0]   sd_dat_o,
+      output   reg     sd_dat_t,
       output   wire    clkout_p,
       output   wire    clkout_n,
       output   wire    dataout_p,
@@ -50,11 +50,37 @@ module artix_emmc_serdes#(
     (* mark_debug = "true" *) reg     bitslip;					
     wire    txclk;
     
-    (* mark_debug = "true" *) wire    [7:0]   slv_reg4;
+    (* mark_debug = "true" *) wire    [7:0]   test_ptrn;
+    (* mark_debug = "true" *) reg     [7:0]   sd_dat_in;
+    (* mark_debug = "true" *) wire    [7:0]   sd_dat_out;
     
     assign SD_clk = sd_clkin;
+    
+    always @(posedge txclk_div)
+       if (rst == 1'b0) begin
+         sd_dat_in <= 0;
+        end
+        else begin
+             sd_dat_in <= {3'b0, sd_dat_i[3:0], cmd_i};
+        end
 
-  //GSR GSR_INST (.GSR (rst));
+    always @(posedge SD_clk)
+       if (rst == 1'b0) begin
+            cmd_o <= 1'b0;
+            cmd_t <= 1'b0;
+            sd_dat_t <= 1'b0;
+            sd_dat_o <= 1'b0;
+        end
+        else begin
+            cmd_o <= sd_dat_out[0];
+            cmd_t <= sd_dat_out[1];
+            sd_dat_t <= sd_dat_out[2];
+            sd_dat_o[3:0] <= sd_dat_out[6:3];
+        end
+    
+
+//  GSR GSR_INST (.GSR (rst));
+  
    // IBUFDS: Differential Input Buffer
    //         Artix-7
    // Xilinx HDL Language Template, version 2016.2
@@ -202,14 +228,14 @@ module artix_emmc_serdes#(
  ISERDESE2_clock_inst (
     .O(),                       // 1-bit output: Combinatorial output
     // Q1 - Q8: 1-bit (each) output: Registered data outputs
-    .Q1(slv_reg4[7]),
-    .Q2(slv_reg4[6]),
-    .Q3(slv_reg4[5]),
-    .Q4(slv_reg4[4]),
-    .Q5(slv_reg4[3]),
-    .Q6(slv_reg4[2]),
-    .Q7(slv_reg4[1]),
-    .Q8(slv_reg4[0]),
+    .Q1(test_ptrn[7]),
+    .Q2(test_ptrn[6]),
+    .Q3(test_ptrn[5]),
+    .Q4(test_ptrn[4]),
+    .Q5(test_ptrn[3]),
+    .Q6(test_ptrn[2]),
+    .Q7(test_ptrn[1]),
+    .Q8(test_ptrn[0]),
     // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
     .SHIFTOUT1(),
     .SHIFTOUT2(),
@@ -267,14 +293,14 @@ module artix_emmc_serdes#(
  ISERDESE2_data_inst (
     .O(),                       // 1-bit output: Combinatorial output
     // Q1 - Q8: 1-bit (each) output: Registered data outputs
-    .Q1(),
-    .Q2(sd_dat_o[3]),
-    .Q3(sd_dat_o[2]),
-    .Q4(sd_dat_o[1]),
-    .Q5(sd_dat_o[0]),
-    .Q6(sd_dat_t),
-    .Q7(cmd_t),
-    .Q8(cmd_o),
+    .Q1(sd_dat_out[7]),
+    .Q2(sd_dat_out[6]),
+    .Q3(sd_dat_out[5]),
+    .Q4(sd_dat_out[4]),
+    .Q5(sd_dat_out[3]),
+    .Q6(sd_dat_out[2]),
+    .Q7(sd_dat_out[1]),
+    .Q8(sd_dat_out[0]),
     // SHIFTOUT1, SHIFTOUT2: 1-bit (each) output: Data width expansion output ports
     .SHIFTOUT1(),
     .SHIFTOUT2(),
@@ -322,7 +348,7 @@ module artix_emmc_serdes#(
        btsl_st <= 2'b00;
      end
      else begin
-       if (slv_reg4[7:0] != bitslip_pattern) begin
+       if (test_ptrn[7:0] != bitslip_pattern) begin
          case (btsl_st)
            2'b00: begin
              bitslip <= 1'b1;
@@ -340,7 +366,7 @@ module artix_emmc_serdes#(
            end
          endcase
        end
-       else if (slv_reg4[7:0] == bitslip_pattern) begin
+       else if (test_ptrn[7:0] == bitslip_pattern) begin
          btsl_com_flag <= 1'b0;
          bitslip <= 1'b0;
        end
@@ -376,14 +402,14 @@ module artix_emmc_serdes#(
       .CLK(txclk),             // 1-bit input: High speed clock
       .CLKDIV(txclk_div),       // 1-bit input: Divided clock
       // D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)
-      .D1(slv_reg4[0]),
-      .D2(slv_reg4[1]),
-      .D3(slv_reg4[2]),
-      .D4(slv_reg4[3]),
-      .D5(slv_reg4[4]),
-      .D6(slv_reg4[5]),
-      .D7(slv_reg4[6]),
-      .D8(slv_reg4[7]),
+      .D1(test_ptrn[0]),
+      .D2(test_ptrn[1]),
+      .D3(test_ptrn[2]),
+      .D4(test_ptrn[3]),
+      .D5(test_ptrn[4]),
+      .D6(test_ptrn[5]),
+      .D7(test_ptrn[6]),
+      .D8(test_ptrn[7]),
       .OCE(1'b1),             // 1-bit input: Output data clock enable
       .RST(!rst),             // 1-bit input: Reset
       // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)
@@ -423,14 +449,14 @@ module artix_emmc_serdes#(
       .CLK(txclk),             // 1-bit input: High speed clock
       .CLKDIV(txclk_div),       // 1-bit input: Divided clock
       // D1 - D8: 1-bit (each) input: Parallel data inputs (1-bit each)
-      .D1(cmd_i),
-      .D2(sd_dat_i[0]),
-      .D3(sd_dat_i[1]),
-      .D4(sd_dat_i[2]),
-      .D5(sd_dat_i[3]),
-      .D6(1'b0),
-      .D7(1'b0),
-      .D8(1'b0),
+      .D1(sd_dat_in[0]),
+      .D2(sd_dat_in[1]),
+      .D3(sd_dat_in[2]),
+      .D4(sd_dat_in[3]),
+      .D5(sd_dat_in[4]),
+      .D6(sd_dat_in[5]),
+      .D7(sd_dat_in[6]),
+      .D8(sd_dat_in[7]),
       .OCE(1'b1),             // 1-bit input: Output data clock enable
       .RST(!rst),             // 1-bit input: Reset
       // SHIFTIN1 / SHIFTIN2: 1-bit (each) input: Data input expansion (1-bit each)

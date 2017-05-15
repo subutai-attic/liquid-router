@@ -67,18 +67,18 @@ module artix_emmc#(
         
     );
 
-    fifo_18kb fifo_18kb_inst(
-        .aclk           (txclk_div),
-        .sd_clk         (SD_clk),
-        .rst            (rst),
-        .axi_data_in    (write_dat_fifo),
-        .sd_data_in     (data_in_rx_fifo),
-        .sd_data_out    (data_out_tx_fifo),
-        .axi_data_out   (read_fifo_out),
-        .sd_rd_en       (rd_fifo),
-        .axi_rd_en      (fifo_data_read_ready),
-        .axi_wr_en      (fifo_data_write_ready),
-        .sd_wr_en       (we_fifo),
-        .sd_full_o      ()
-    );
+//    fifo_18kb fifo_18kb_inst(
+//        .aclk           (txclk_div),
+//        .sd_clk         (SD_clk),
+//        .rst            (rst),
+//        .axi_data_in    (write_dat_fifo),
+//        .sd_data_in     (data_in_rx_fifo),
+//        .sd_data_out    (data_out_tx_fifo),
+//        .axi_data_out   (read_fifo_out),
+//        .sd_rd_en       (rd_fifo),
+//        .axi_rd_en      (fifo_data_read_ready),
+//        .axi_wr_en      (fifo_data_write_ready),
+//        .sd_wr_en       (we_fifo),
+//        .sd_full_o      ()
+//    );
 endmodule
