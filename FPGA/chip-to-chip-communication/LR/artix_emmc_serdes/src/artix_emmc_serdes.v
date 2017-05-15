@@ -30,25 +30,26 @@ module artix_emmc_serdes#(
       input   wire    clkin_n,
       input   wire    datain_p,
       input   wire    datain_n,
-      input   wire    cmd_i,
+      (* mark_debug = "true" *) input   wire    cmd_i,
       (* mark_debug = "true" *) input   wire [7:0]    sd_dat_i,
       (* mark_debug = "true" *) input   wire    sd_clkin,
 
       output   wire   SD_clk,
       (* mark_debug = "true" *) output   wire   cmd_o,
-      output   wire   cmd_t,
-      (* mark_debug = "true" *) output   wire [7:0]   sd_dat_o,
+      (* mark_debug = "true" *) output   wire   cmd_t,
+      output   wire [7:0]   sd_dat_o,
       output   wire [7:0]   sd_dat_t,
       output   wire    clkout_p,
       output   wire    clkout_n,
       output   wire    dataout_p,
-      output   wire    dataout_n
+      output   wire    dataout_n,
+      output   wire    txclk_div
     );
 
 
     (* mark_debug = "true" *) reg     bitslip;					
-    (* mark_debug = "true" *) wire    txclk;
-    (* mark_debug = "true" *) wire    txclk_div;
+    wire    txclk;
+    
     (* mark_debug = "true" *) wire    [7:0]   slv_reg4;
     
     assign SD_clk = sd_clkin;
@@ -321,7 +322,7 @@ module artix_emmc_serdes#(
        btsl_st <= 2'b00;
      end
      else begin
-       if (slv_reg4[7:0] != bitslip_pattern && btsl_com_flag) begin
+       if (slv_reg4[7:0] != bitslip_pattern) begin
          case (btsl_st)
            2'b00: begin
              bitslip <= 1'b1;
@@ -341,6 +342,7 @@ module artix_emmc_serdes#(
        end
        else if (slv_reg4[7:0] == bitslip_pattern) begin
          btsl_com_flag <= 1'b0;
+         bitslip <= 1'b0;
        end
      end
    end
