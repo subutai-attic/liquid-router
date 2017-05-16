@@ -465,11 +465,11 @@
       </xilinx:taxonomies>
       <xilinx:displayName>artix_emmc_serdes_v1_0</xilinx:displayName>
       <xilinx:definitionSource>package_project</xilinx:definitionSource>
-      <xilinx:coreRevision>16</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2017-05-15T01:19:51Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>20</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2017-05-16T09:37:10Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="nopcore"/>
-        <xilinx:tag xilinx:name="user.org:user:artix_emmc_serdes:1.0_ARCHIVE_LOCATION">/home/baktiiar/workspace/liquid-router/FPGA/chip-to-chip-communication/LR/artix_emmc_serdes</xilinx:tag>
+        <xilinx:tag xilinx:name="user.org:user:artix_emmc_serdes:1.0_ARCHIVE_LOCATION">/home/baktiiar/workspace/github/liquid-router/FPGA/chip-to-chip-communication/LR/artix_emmc_serdes</xilinx:tag>
       </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>

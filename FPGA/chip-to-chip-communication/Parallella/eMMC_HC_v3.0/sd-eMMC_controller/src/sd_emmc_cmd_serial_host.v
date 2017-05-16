@@ -116,7 +116,12 @@ reg [STATE_SIZE-1:0] next_state;
 //Misc
 `define cmd_idx  (CMD_SIZE-1-counter) 
 
+wire cmd_i_start;
+reg [1:0] cmd_i_state;
+integer cmd_i_count;
+
 assign command_inhibit_cmd = ((state == FINISH_WO) || (state == FINISH_WR));
+assign cmd_i_start = !cmd_dat_reg;
  
 //sd cmd input pad register
 always @(posedge sd_clk)
@@ -153,10 +158,10 @@ begin: FSM_COMBO
         SETUP_CRC:
             next_state <= WRITE;
         WRITE:
-            if (counter >= (BITS_TO_SEND + 2) && with_response) begin
+            if (counter >= BITS_TO_SEND && with_response && cmd_i_count >= BITS_TO_SEND) begin
                 next_state <= READ_WAIT;
             end
-            else if (counter >= (BITS_TO_SEND + 2)) begin
+            else if (counter >= BITS_TO_SEND && cmd_i_count >= BITS_TO_SEND) begin
                 next_state <= FINISH_WO;
             end
             else begin
@@ -232,6 +237,8 @@ begin: FSM_OUT
         crc_ok_o <= 0;
         crc_ok <= 0;
         counter <= 0;
+        cmd_i_count <= 0;
+        cmd_i_state <= 0;
     end
     else begin
         case(state)
@@ -243,6 +250,8 @@ begin: FSM_OUT
             IDLE: begin
                 cmd_oe_o <= 1;      //Put CMD to Z
                 counter <= 0;
+                cmd_i_count <= 0;
+                cmd_i_state <= 0;
                 crc_rst <= 1;
                 crc_enable <= 0;
                 response_o <= 0;
@@ -276,10 +285,23 @@ begin: FSM_OUT
                     cmd_out_o <= 1'b1;
                 end
                 else begin
-                    cmd_oe_o <= 1;
+//                    cmd_oe_o <= 1;
                     cmd_out_o <= 1'b1;
                 end
                 counter <= counter+1;
+                if (cmd_i_start)
+                    cmd_i_state <= 1;
+                case (cmd_i_state)
+                    00: begin
+                        cmd_i_count <= 1;
+                       end
+                    01: begin
+                        cmd_i_count <= cmd_i_count + 1;
+                        end     
+                    default: cmd_i_state <= 0;
+                 endcase   
+                 if (counter >= BITS_TO_SEND && cmd_i_count >= BITS_TO_SEND)
+                    cmd_oe_o <= 1;
             end
             READ_WAIT: begin
                 crc_enable <= 0;

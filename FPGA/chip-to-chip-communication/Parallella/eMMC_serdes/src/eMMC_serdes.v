@@ -18,8 +18,8 @@
         (* mark_debug = "true" *) input   wire    sd_dat_t,
         (* mark_debug = "true" *) input   wire [7:0]   sd_dat_o,
         
-        (* mark_debug = "true" *) output  reg    cmd_i,
-        (* mark_debug = "true" *) output  reg [7:0]    sd_dat_i,
+        (* mark_debug = "true" *) output  wire    cmd_i,
+        (* mark_debug = "true" *) output  wire [7:0]    sd_dat_i,
         output  wire    clkout_p,
         output  wire    clkout_n,
         output  wire    dataout_p,
@@ -37,24 +37,27 @@
      (* mark_debug = "true" *) wire [7:0] sd_dat_in;
     
     assign clk_div = txclk_div;
+    assign cmd_i = sd_dat_in[0];
+    assign sd_dat_i[3:0] = sd_dat_in[4:1];
 
     always @(posedge txclk_div)
        if (rst == 1'b0) begin
          sd_dat_out <= 0;
         end
         else begin
-             sd_dat_out <= {1'b0, sd_dat_o, sd_dat_t, cmd_t, cmd_o};
+             sd_dat_out <= { 1'b0, sd_dat_o[3:0], sd_dat_t, cmd_t, cmd_o};
         end
 
-    always @(posedge SD_clk)
-       if (rst == 1'b0) begin
-            cmd_i <= 1'b0;
-            sd_dat_i <= 0;
-        end
-        else begin
-            cmd_i <= sd_dat_in[0];
-            sd_dat_i[3:0] <= sd_dat_in[4:1];
-        end
+
+//    always @(posedge SD_clk)
+//       if (rst == 1'b0) begin
+//            cmd_i <= 1'b0;
+//            sd_dat_i <= 0;
+//        end
+//        else begin
+//            cmd_i <= sd_dat_in[0];
+//            sd_dat_i[3:0] <= sd_dat_in[4:1];
+//        end
    // PLLE2_BASE: Base Phase Locked Loop (PLL)
    //             Artix-7
    // Xilinx HDL Language Template, version 2016.2
