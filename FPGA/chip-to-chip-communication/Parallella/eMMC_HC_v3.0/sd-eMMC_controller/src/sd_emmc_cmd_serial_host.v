@@ -293,7 +293,7 @@ begin: FSM_OUT
                     cmd_i_state <= 1;
                 case (cmd_i_state)
                     00: begin
-                        cmd_i_count <= 1;
+                        cmd_i_count <= 3;
                        end
                     01: begin
                         cmd_i_count <= cmd_i_count + 1;

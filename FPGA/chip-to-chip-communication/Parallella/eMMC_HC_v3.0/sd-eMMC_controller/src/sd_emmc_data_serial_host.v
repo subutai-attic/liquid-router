@@ -80,8 +80,8 @@ module sd_data_serial_host(
            input [31:0] data_in,
            output reg rd,
            //Rx Fifo
-           output wire [31:0] data_out_o,
-           output reg we,
+           (* mark_debug = "true" *) output wire [31:0] data_out_o,
+           (* mark_debug = "true" *) output reg we,
            //tristate data
            output reg DAT_oe_o,
            output reg [15:0] d1d2_reg,
