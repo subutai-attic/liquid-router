@@ -30,13 +30,13 @@ module artix_emmc_serdes#(
       input   wire    clkin_n,
       input   wire    datain_p,
       input   wire    datain_n,
-      (* mark_debug = "true" *) input   wire    cmd_i,
-      (* mark_debug = "true" *) input   wire [7:0]    sd_dat_i,
-      (* mark_debug = "true" *) input   wire    sd_clkin,
+      input   wire    cmd_i,
+      input   wire [7:0]    sd_dat_i,
+      input   wire    sd_clkin,
 
       output   wire   SD_clk,
-      (* mark_debug = "true" *) output   reg   cmd_o,
-      (* mark_debug = "true" *) output   reg   cmd_t,
+      output   reg   cmd_o,
+      output   reg   cmd_t,
       output   reg [7:0]   sd_dat_o,
       output   reg     sd_dat_t,
       output   wire    clkout_p,
@@ -47,12 +47,12 @@ module artix_emmc_serdes#(
     );
 
 
-    (* mark_debug = "true" *) reg     bitslip;					
+    reg     bitslip;					
     wire    txclk;
     
-    (* mark_debug = "true" *) wire    [7:0]   test_ptrn;
-    (* mark_debug = "true" *) reg     [7:0]   sd_dat_in;
-    (* mark_debug = "true" *) wire    [7:0]   sd_dat_out;
+    wire    [7:0]   test_ptrn;
+    reg     [7:0]   sd_dat_in;
+    wire    [7:0]   sd_dat_out;
     
     assign SD_clk = sd_clkin;
     
@@ -64,7 +64,7 @@ module artix_emmc_serdes#(
              sd_dat_in <= {3'b0, sd_dat_i[3:0], cmd_i};
         end
 
-    always @(posedge SD_clk)
+    always @(posedge SD_clk )
        if (rst == 1'b0) begin
             cmd_o <= 1'b0;
             cmd_t <= 1'b0;
@@ -127,7 +127,7 @@ module artix_emmc_serdes#(
      .CLKIN1_PERIOD(10.0),      // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
      // CLKOUT0_DIVIDE - CLKOUT5_DIVIDE: Divide amount for each CLKOUT (1-128)
      .CLKOUT0_DIVIDE(2),
-     .CLKOUT1_DIVIDE(4),
+     .CLKOUT1_DIVIDE(8),
      .CLKOUT2_DIVIDE(1),
      .CLKOUT3_DIVIDE(1),
      .CLKOUT4_DIVIDE(1),

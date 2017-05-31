@@ -77,14 +77,14 @@ module sd_data_serial_host(
            input sd_clk90,
            input rst,
            //Tx Fifo
-           input [31:0] data_in,
-           output reg rd,
+           (* mark_debug = "true" *) input [31:0] data_in,
+           (* mark_debug = "true" *) output reg rd,
            //Rx Fifo
            (* mark_debug = "true" *) output wire [31:0] data_out_o,
            (* mark_debug = "true" *) output reg we,
            //tristate data
            output reg DAT_oe_o,
-           output reg [15:0] d1d2_reg,
+           output wire [7:0] sd_dat_o,
            input [7:0] iddrQ1,
            //Controll signals
            input [`BLKSIZE_W-1:0] blksize,
@@ -112,9 +112,9 @@ reg [15:0] crc_in;
 reg crc_en;
 reg crc_rst;
 wire [15:0] crc_out [15:0];
-reg [`BLKSIZE_W-1+4:0] transf_cnt;
+(* mark_debug = "true" *) reg [`BLKSIZE_W-1+4:0] transf_cnt;
 parameter SIZE = 6;
-reg [SIZE-1:0] state;
+(* mark_debug = "true" *) reg [SIZE-1:0] state;
 reg [SIZE-1:0] next_state;
 parameter IDLE       = 6'b000001;
 parameter WRITE_DAT  = 6'b000010;
@@ -131,20 +131,24 @@ reg next_block;
 wire start_bit;
 reg [4:0] crc_c;
 reg [7:0] last_din;
-reg [3:0] crc_s;
+(* mark_debug = "true" *) reg [3:0] crc_s;
 reg [4:0] data_index;
 reg [31:0] data_out;
 //wire [7:0] iddrQ1;
 //wire [7:0] iddrQ2;
 wire DDR50;
 reg [7:0] last_dinDDR;
-//reg [15:0] d1d2_reg;
+reg [15:0] d1d2_reg;
 reg [7:0] DAT_dat_regn;
+
+
+reg [`BLKSIZE_W-1+4:0] inc_cnt;
+reg                    trns_flag;
 
 assign data_out_o [31:0] = {data_out[7:0], data_out[15:8], data_out[23:16], data_out[31:24]};
 assign DDR50 = UHSMode == 3'b100 ? 1'b1: 1'b0;
 assign data_cycles = (bus_8bit && DDR50) ? blksize >> 1 : (bus_8bit && !DDR50) ? blksize : bus_4bit ? blksize << 1 : blksize << 3;
-
+assign sd_dat_o = d1d2_reg[7:0];
 
 //sd data input pad register
 always @(posedge sd_clk)
@@ -207,7 +211,7 @@ begin: FSM_COMBO
                 next_state <= WRITE_WAIT;
         end
         WRITE_DAT: begin
-            if (transf_cnt >= data_cycles+20 && start_bit)
+            if (transf_cnt >= data_cycles+20 && start_bit && inc_cnt >= data_cycles+18)
                 next_state <= WRITE_CRC;
             else
                 next_state <= WRITE_DAT;
@@ -274,6 +278,8 @@ begin: FSM_OUT
         blkcnt_reg <= 0;
         bus_4bit_reg <= 0;
         bus_8bit_reg <= 0;
+        inc_cnt <= 0;
+        trns_flag <= 0;
     end
     else begin
         state <= next_state;
@@ -295,6 +301,9 @@ begin: FSM_OUT
                 bus_4bit_reg <= bus_4bit;
                 bus_8bit_reg <= bus_8bit;
                 d1d2_reg <= 16'hffff;
+                
+                inc_cnt <= 1;
+                trns_flag <= 0;
             end
             WRITE_WAIT: begin
                 data_index <= 0;
@@ -303,6 +312,10 @@ begin: FSM_OUT
             WRITE_DAT: begin
                 crc_ok <= 0;
                 transf_cnt <= transf_cnt + 1;
+                if (start_bit)
+                    trns_flag <= 1;
+                if (trns_flag)
+                    inc_cnt <= inc_cnt + 1;
                 rd <= 0;
                 if (transf_cnt == 0) begin
                   crc_rst <= 0;
@@ -410,6 +423,7 @@ begin: FSM_OUT
                       end
                     end
                     else if (bus_4bit_reg) begin
+                        d1d2_reg <= {2{last_din}};
                         last_din <= {4'hF,
                             data_in[31-(data_index[2:0]<<2)], 
                             data_in[30-(data_index[2:0]<<2)], 
@@ -426,6 +440,7 @@ begin: FSM_OUT
                             rd <= 1;
                     end
                     else begin
+                        d1d2_reg <= {2{last_din}};
                         last_din <= {7'h7F, data_in[31-data_index]};
                         crc_in <= {7'h7F, data_in[31-data_index]};
                         if (data_index == 29/*not 31 - read delay !!!*/)
@@ -483,7 +498,7 @@ begin: FSM_OUT
 //                    DAT_oe_o <= 0;
                     d1d2_reg <= 16'hFFFF;
                 end
-                else if (transf_cnt >= data_cycles+18) begin
+                else if ((transf_cnt >= data_cycles+18) && (inc_cnt >= data_cycles+12)) begin
                     DAT_oe_o <= 1;
                 end
             end
@@ -508,6 +523,8 @@ begin: FSM_OUT
                     crc_status <= 0;
                 end
                 transf_cnt <= 0;
+                inc_cnt <= 1;
+                trns_flag <= 0;
             end
             READ_WAIT: begin
                 DAT_oe_o <= 1;

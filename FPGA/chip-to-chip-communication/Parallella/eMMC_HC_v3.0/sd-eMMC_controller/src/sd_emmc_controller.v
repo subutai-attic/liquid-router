@@ -401,7 +401,7 @@
         .data_out_o       (data_in_rx_fifo),
         .we             (we_fifo),
         .DAT_oe_o       (sd_dat_t),
-        .d1d2_reg       (sd_dat_o),
+        .sd_dat_o       (sd_dat_o),
         .iddrQ1         (sd_dat_i),
         .blksize        (block_size_sd_clk),
         .bus_4bit       (controll_setting_sd_clk),
