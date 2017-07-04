@@ -1,4 +1,42 @@
-	module eMMC_serdes #
+//////////////////////////////////////////////////////////////////////
+// Company: Optimal Dynamics LLC
+// Engineer: Baktiiar Kukanov 
+// 
+// Create Date: 10/05/2017 11:41:32 AM
+// Design Name: 
+// Module Name: SerDes
+// Project Name: SerDes for eMMC Host Controller
+// Target Devices: Xilinx ZYNQ 7000
+// Tool Versions: Vivado 2016.2
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+////                                                              ////
+//// SerDes IP Core                                               ////
+////                                                              ////
+//// eMMC_serdes.v                                                ////
+////                                                              ////
+//// Controller IP Core project                                   ////
+////                                                              ////
+////                                                              ////
+//// Description                                                  ////
+//// Module resposible for sending and receiving data through     ////
+//// 4 bits eMMC card data interface                              ////
+////                                                              ////
+//// Author(s):                                                   ////
+////     - Baktiiar Kukanov, bkukanov@gmail.com                   ////
+////                                                              ////
+//////////////////////////////////////////////////////////////////////
+
+
+module eMMC_serdes #
 (
         parameter       TX_CLOCK = "BUF_G" ,   		// Parameter to set transmission clock buffer type, BUFIO, BUF_H, BUF_G
         parameter       DIV_CLOCK = "BUF_G" ,          	// Parameter to set intermediate clock buffer type, BUFR, BUF_H, BUF_G
@@ -13,13 +51,13 @@
         input   wire    clkin_n,
         input   wire    datain_p,
         input   wire    datain_n,
-        (* mark_debug = "true" *) input   wire    cmd_o,
-        (* mark_debug = "true" *) input   wire    cmd_t,
-        (* mark_debug = "true" *) input   wire    sd_dat_t,
-        (* mark_debug = "true" *) input   wire [7:0]   sd_dat_o,
-        
-        (* mark_debug = "true" *) output  wire    cmd_i,
-        (* mark_debug = "true" *) output  wire [7:0]    sd_dat_i,
+        input   wire    cmd_o,
+        input   wire    cmd_t,
+        input   wire    sd_dat_t,
+        input   wire [7:0]   sd_dat_o,
+       
+        output  wire    cmd_i,
+        output  wire [7:0]    sd_dat_i,
         output  wire    clkout_p,
         output  wire    clkout_n,
         output  wire    dataout_p,
@@ -32,9 +70,9 @@
 	 wire txclk;
      wire txclk_div;
      
-     (* mark_debug = "true" *) wire [7:0] test_ptrn;
-     (* mark_debug = "true" *) reg  [7:0] sd_dat_out;
-     (* mark_debug = "true" *) wire [7:0] sd_dat_in;
+     wire [7:0] test_ptrn;
+     reg  [7:0] sd_dat_out;
+     wire [7:0] sd_dat_in;
     
     assign clk_div = txclk_div;
     assign cmd_i = sd_dat_in[0];
@@ -49,15 +87,6 @@
         end
 
 
-//    always @(posedge SD_clk)
-//       if (rst == 1'b0) begin
-//            cmd_i <= 1'b0;
-//            sd_dat_i <= 0;
-//        end
-//        else begin
-//            cmd_i <= sd_dat_in[0];
-//            sd_dat_i[3:0] <= sd_dat_in[4:1];
-//        end
    // PLLE2_BASE: Base Phase Locked Loop (PLL)
    //             Artix-7
    // Xilinx HDL Language Template, version 2016.2
@@ -424,8 +453,8 @@
    
    
    reg  btsl_com_flag;          //operation complete flag
-    (* mark_debug = "true" *) reg [1:0] btsl_st;  //states need to wait shifting of Q1 to Q8 output ports after bitslip assertion
-    (* mark_debug = "true" *) reg [3:0] count;
+   reg [1:0] btsl_st;  //states need to wait shifting of Q1 to Q8 output ports after bitslip assertion
+   reg [3:0] count;
    localparam bitslip_pattern  = 8'hC3;   
    
    always @(posedge txclk_div)

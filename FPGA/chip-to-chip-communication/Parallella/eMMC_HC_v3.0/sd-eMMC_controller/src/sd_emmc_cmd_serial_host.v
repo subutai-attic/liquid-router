@@ -67,16 +67,16 @@ module sd_mmc_cmd_serial_host (
 input sd_clk;                               // clock from clock divider
 input rst;                                  // system reset
 input [1:0] setting_i;                      // response settings big/small wait for response or not
-(* mark_debug = "true" *) input [39:0] cmd_i;                         // command taken from command master module
-(* mark_debug = "true" *) input start_i;                              // flag for start to send command to the SD card
-(* mark_debug = "true" *) input cmd_dat_i;                            // command which will come from SD card    
+input [39:0] cmd_i;                         // command taken from command master module
+input start_i;                              // flag for start to send command to the SD card
+input cmd_dat_i;                            // command which will come from SD card    
 //---------------Output ports---------------
-(* mark_debug = "true" *) output reg [119:0] response_o;              // the output response which received from SD card
-(* mark_debug = "true" *) output reg finish_o;                        // The flag of finished to send the command
+output reg [119:0] response_o;              // the output response which received from SD card
+output reg finish_o;                        // The flag of finished to send the command
 output reg crc_ok_o;                        // The CRC flag 
 output reg index_ok_o;                      // The index check flag
-(* mark_debug = "true" *) output reg cmd_oe_o;                        // The command send enable
-(* mark_debug = "true" *) output reg cmd_out_o;                       // The command sending pot for the SD card
+output reg cmd_oe_o;                        // The command send enable
+output reg cmd_out_o;                       // The command sending pot for the SD card
 output command_inhibit_cmd;
 //-------------Internal Constant-------------
 parameter INIT_DELAY = 4;
@@ -111,7 +111,7 @@ parameter
     READ = 7'h10,
     FINISH_WR = 7'h20,
     FINISH_WO = 7'h40;
-(* mark_debug = "true" *) reg [STATE_SIZE-1:0] state;
+reg [STATE_SIZE-1:0] state;
 reg [STATE_SIZE-1:0] next_state;
 //Misc
 `define cmd_idx  (CMD_SIZE-1-counter) 

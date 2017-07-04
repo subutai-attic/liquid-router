@@ -42,8 +42,7 @@ module artix_emmc_serdes#(
       output   wire    clkout_p,
       output   wire    clkout_n,
       output   wire    dataout_p,
-      output   wire    dataout_n,
-      output   wire    txclk_div
+      output   wire    dataout_n
     );
 
 
@@ -79,8 +78,7 @@ module artix_emmc_serdes#(
         end
     
 
-//  GSR GSR_INST (.GSR (rst));
-  
+
    // IBUFDS: Differential Input Buffer
    //         Artix-7
    // Xilinx HDL Language Template, version 2016.2
@@ -107,15 +105,6 @@ module artix_emmc_serdes#(
 
    // End of IBUFDS_inst instantiation
 
- 
-//    assign clk = clkin;
-
-//    always@(posedge clkin) begin
-//        if(reset == 1'b0)
-//            rst <= 0;
-//        else
-//            rst <= 1;
-//    end
   // PLLE2_BASE: Base Phase Locked Loop (PLL)
   //             Artix-7
   // Xilinx HDL Language Template, version 2016.2

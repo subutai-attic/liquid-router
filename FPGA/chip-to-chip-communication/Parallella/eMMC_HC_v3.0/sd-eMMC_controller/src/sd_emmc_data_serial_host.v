@@ -77,11 +77,11 @@ module sd_data_serial_host(
            input sd_clk90,
            input rst,
            //Tx Fifo
-           (* mark_debug = "true" *) input [31:0] data_in,
-           (* mark_debug = "true" *) output reg rd,
+           input [31:0] data_in,
+           output reg rd,
            //Rx Fifo
-           (* mark_debug = "true" *) output wire [31:0] data_out_o,
-           (* mark_debug = "true" *) output reg we,
+           output wire [31:0] data_out_o,
+           output reg we,
            //tristate data
            output reg DAT_oe_o,
            output wire [7:0] sd_dat_o,
@@ -112,9 +112,9 @@ reg [15:0] crc_in;
 reg crc_en;
 reg crc_rst;
 wire [15:0] crc_out [15:0];
-(* mark_debug = "true" *) reg [`BLKSIZE_W-1+4:0] transf_cnt;
+reg [`BLKSIZE_W-1+4:0] transf_cnt;
 parameter SIZE = 6;
-(* mark_debug = "true" *) reg [SIZE-1:0] state;
+reg [SIZE-1:0] state;
 reg [SIZE-1:0] next_state;
 parameter IDLE       = 6'b000001;
 parameter WRITE_DAT  = 6'b000010;
@@ -131,7 +131,7 @@ reg next_block;
 wire start_bit;
 reg [4:0] crc_c;
 reg [7:0] last_din;
-(* mark_debug = "true" *) reg [3:0] crc_s;
+reg [3:0] crc_s;
 reg [4:0] data_index;
 reg [31:0] data_out;
 //wire [7:0] iddrQ1;
