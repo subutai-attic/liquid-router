@@ -1,7 +1,7 @@
 # liquid-router
 The Subutai Liquid Router open hardware project sources.
 
-Chip to chip communication folder include eMMC HC and LVDS communication for host controller IP core's 
+- Chip to chip communication folder include eMMC Host Controller and SerDes IP cores. eMMC HC has been divided into Parallella and Liquid Router boards, SerDes IP core used to comminicate this divided eMMC HC between the boards.
 
 
 For more information about this project, please visit: https://optimal-dynamics.com/liquid-router.html
