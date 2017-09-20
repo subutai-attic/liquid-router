@@ -1,0 +1,3 @@
+Record=TopLevelDocument|FileName=ETH_Switch.SchDoc
+Record=SheetSymbol|SourceDocument=FPGA.SchDoc|Designator=POWER|SchDesignator=POWER|FileName=Power.SchDoc|SymbolType=Normal|RawFileName=Power.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=ETH_Switch.SchDoc|Designator=Filter|SchDesignator=Filter|FileName=Filter.SchDoc|SymbolType=Normal|RawFileName=Filter.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 

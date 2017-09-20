@@ -1,5 +1,0 @@
-Layer Pairs Export File for PCB: E:\Metin\V3\PCB.PcbDoc
-LayersSetName=Top_Bot_Plated_Thru_Holes|DrillFile=pcb-plated.txt|DrillLayers=gtl,gp1,g1,g2,gp2,g3,gp3,gbl
-LayersSetName=Top_Bot_NonPlated_Thru_Holes|DrillFile=pcb-nonplated.txt|DrillLayers=gtl,gp1,g1,g2,gp2,g3,gp3,gbl
-LayersSetName=Top_IN1_Blind_Vias|DrillFile=|DrillLayers=gtl,gp1,g1
-LayersSetName=IN1_IN3_Buried_Vias|DrillFile=|DrillLayers=g1,g2,gp2,g3
