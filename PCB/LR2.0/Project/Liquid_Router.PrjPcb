@@ -38,7 +38,7 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
-DocumentPath=Zynq.SchDoc
+DocumentPath=ETH-PHY.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -52,26 +52,9 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=KECWKLRU
+DocumentUniqueId=SGKUFUPY
 
 [Document2]
-DocumentPath=WLAN.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=JLKFJIXU
-
-[Document3]
 DocumentPath=PCB.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -88,7 +71,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=XIOQJUAG
 
-[Document4]
+[Document3]
 DocumentPath=Schlib.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -105,7 +88,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=SMEYRSXI
 
-[Document5]
+[Document4]
 DocumentPath=PcbLib.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -121,40 +104,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QSHWNRCW
-
-[Document6]
-DocumentPath=..\..\Library\AltiumLibrary_butterwick\vh_altium_library.intLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document7]
-DocumentPath=..\..\Library\AltiumLibrary_butterwick\Libraries\Texas Instruments\TI Communication Interface.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
 
 [Configuration1]
 Name=Sources
@@ -418,7 +367,9 @@ OutputName16=Schematic Prints
 OutputDocumentPath16=
 OutputVariantName16=
 OutputDefault16=0
-PageOptions16=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
+PageOptions16=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
+Configuration16_Name1=OutputConfigurationParameter1
+Configuration16_Item1=Record=SchPrintView|ShowNoERC=True|ShowParamSet=True|ShowProbe=True|ShowBlanket=True|NoERCSymbolsToShow="Thin Cross","Thick Cross","Small Cross",Checkbox,Triangle|ShowNote=True|ShowNoteCollapsed=True|ShowOpenEnds=True|ExpandDesignator=True|ExpandNetLabel=False|ExpandPort=False|ExpandSheetNum=False|ExpandDocNum=False|PrintArea=0|PrintAreaRect.X1=0|PrintAreaRect.Y1=0|PrintAreaRect.X2=0|PrintAreaRect.Y2=0
 OutputType17=SimView Print
 OutputName17=SimView Prints
 OutputDocumentPath17=
