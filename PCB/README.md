@@ -1,5 +1,5 @@
-# liquid-router
-The Subutai Liquid Router open hardware project sources.
+# Subutai™ Router
+The Subutai™ Router open hardware project sources.
 
 The 3DRender includes the 3D pdf of the board.
 
