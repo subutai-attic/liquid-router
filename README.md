@@ -1,4 +1,4 @@
-# liquid-router
+# Subutai(TM) Router
 The Subutai(TM) Router open hardware project sources.
 
 The FPGA folder includes IP cores, FPGA projects
