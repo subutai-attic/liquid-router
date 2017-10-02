@@ -17,7 +17,7 @@ The SchematicPdf folder includes the schematic in the form of pdf.
 
 
 
-For more information about this project, please visit: https://optimal-dynamics.com/liquid-router.html
+For more information about this project, please visit: https://optdyn.com/subutai-router.html
 
 
 Sunshine,
